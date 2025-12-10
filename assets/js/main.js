@@ -61,3 +61,25 @@ function showToast(message) {
     });
   });
 }
+window.addEventListener("load", () => {
+  const loader = document.getElementById("loader");
+  if (loader) {
+    loader.classList.add("hidden");
+  }
+});
+const reveals = document.querySelectorAll(".reveal");
+
+function revealOnScroll() {
+  reveals.forEach((el) => {
+    const windowHeight = window.innerHeight;
+    const elementTop = el.getBoundingClientRect().top;
+    const elementVisible = 120;
+
+    if (elementTop < windowHeight - elementVisible) {
+      el.classList.add("active");
+    }
+  });
+}
+
+window.addEventListener("scroll", revealOnScroll);
+window.addEventListener("load", revealOnScroll);
