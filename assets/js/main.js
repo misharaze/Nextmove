@@ -59,3 +59,10 @@ function showToast(message) {
       toast.classList.remove("show");
     }, 3000);
   }
+  document.addEventListener("mousemove", e => {
+    document.querySelectorAll(".hero-particles span").forEach((particle, i) => {
+      const speed = (i + 1) * 0.3;
+      particle.style.transform = `translate(${e.clientX * speed / 100}px, ${e.clientY * speed / 100}px)`;
+    });
+  });
+  
