@@ -1,43 +1,33 @@
-import nodemailer from "nodemailer";
+import { Resend } from "resend";
+
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 export default async function handler(req, res) {
   if (req.method !== "POST") {
-    return res.status(405).json({ message: "Метод не разрешён" });
+    return res.status(405).json({ success: false });
   }
 
-  const { name, phone, email, message } = req.body;
-
-  if (!name || !phone) {
-    return res.status(400).json({ success: false, message: "Заполните имя и телефон" });
-  }
+  const { name, phone, email, destination, message } = req.body;
 
   try {
-    const transporter = nodemailer.createTransport({
-      host: process.env.MAIL_HOST,
-      port: process.env.MAIL_PORT,
-      secure: false,
-      auth: {
-        user: process.env.MAIL_USER,
-        pass: process.env.MAIL_PASS
-      }
-    });
-
-    await transporter.sendMail({
-      from: `"NextMove" <${process.env.MAIL_USER}>`,
-      to: process.env.MAIL_USER,
-      subject: "Новая заявка NextMove 🚚",
+    await resend.emails.send({
+      from: "ЧудаТур <onboarding@resend.dev>",
+      to: process.env.TO_EMAIL,
+      subject: "Новая заявка с сайта ЧудаТур",
       html: `
-        <h3>Новая заявка</h3>
+        <h2>Новая заявка</h2>
         <p><b>Имя:</b> ${name}</p>
         <p><b>Телефон:</b> ${phone}</p>
-        <p><b>Email:</b> ${email || "не указан"}</p>
-        <p><b>Сообщение:</b><br>${message || "не указано"}</p>
+        <p><b>Email:</b> ${email}</p>
+        <p><b>Направление:</b> ${destination}</p>
+        <p><b>Сообщение:</b> ${message}</p>
       `
     });
 
-    res.status(200).json({ success: true });
+    return res.status(200).json({ success: true });
+
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ success: false });
+    console.error("EMAIL ERROR:", error);
+    return res.status(500).json({ success: false, error });
   }
 }

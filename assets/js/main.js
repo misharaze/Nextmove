@@ -2,37 +2,32 @@ function sendFormData(formElement) {
     const loader = document.getElementById("loader");
     loader.classList.remove("hidden");
   
-    const formData = new FormData(formElement);
-  
-    const data = {
-      name: formData.get("name"),
-      phone: formData.get("phone"),
-      email: formData.get("email"),
-      message: formData.get("message")
-    };
-  
-    fetch("/api/send", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data)
-    })
-    .then(res => res.json())
-    .then(data => {
-      loader.classList.add("hidden");
-      if (data.success) {
-        showToast("✅ Заявка успешно отправлена!");
-        formElement.reset();
+    const form = document.getElementById("contactForm");
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+    
+      const data = Object.fromEntries(new FormData(form));
+    
+      const res = await fetch("/api/send", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+    
+      const result = await res.json();
+    
+      if (result.success) {
+        alert("✅ Заявка отправлена!");
+        form.reset();
       } else {
-        showToast("❌ Ошибка отправки");
+        alert("❌ Ошибка отправки");
+        console.error(result);
       }
-    })
-    .catch(() => {
-      loader.classList.add("hidden");
-      showToast("❌ Сервер недоступен");
     });
-  }
+    
   
-  // ===== SCROLL REVEAL =====
+ 
 const reveals = document.querySelectorAll(".reveal");
 
 function revealOnScroll() {
@@ -65,4 +60,4 @@ function showToast(message) {
       particle.style.transform = `translate(${e.clientX * speed / 100}px, ${e.clientY * speed / 100}px)`;
     });
   });
-  
+}
