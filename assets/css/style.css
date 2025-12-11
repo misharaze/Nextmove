@@ -74,15 +74,24 @@ body {
     box-shadow: 0 0 30px rgba(0, 229, 255, 1);
   }
   
-  /* ===== HERO SECTION ===== */
+ 
   #hero {
-    min-height: 100vh;
+    min-height: 100svh;
+    padding-top: 140px;
+    padding-bottom: 80px;
     background: 
       linear-gradient(180deg, rgba(5,1,13,0.7), rgba(5,1,13,1)),
       url("../images/hero-bg.jpg") center/cover no-repeat;
     display: flex;
     justify-content: center;
     align-items: center;
+  }
+  @media (max-width: 768px) {
+    #hero {
+      min-height: auto;
+      padding-top: 120px;
+      padding-bottom: 80px;
+    }
   }
   
   .hero-title {
@@ -321,13 +330,6 @@ body {
   filter: blur(1px);
 }
 
-.hero-line-left {
-  left: 50px;
-}
-
-.hero-line-right {
-  right: 50px;
-}
 
 /* Бейдж */
 .hero-badge {
@@ -734,5 +736,91 @@ h1, h2, h3, h4, h5, h6 {
   .btn {
     font-size: 14px;
     padding: 12px 18px;
+  }
+}
+@media (max-width: 768px) {
+  .hero-line {
+    width: 2px;
+    opacity: 0.3;
+  }
+
+  .hero-line-left {
+    left: 15px;
+  }
+
+  .hero-line-right {
+    right: 15px;
+  }
+}
+@media (max-width: 768px) {
+  #hero .container,
+  #hero {
+    text-align: center;
+  }
+
+  .hero-main-btn,
+  .hero-secondary-btn {
+    width: 100%;
+    margin-bottom: 15px;
+  }
+}@media (max-width: 768px) {
+  #hero .container,
+  #hero {
+    text-align: center;
+  }
+
+  .hero-main-btn,
+  .hero-secondary-btn {
+    width: 100%;
+    margin-bottom: 15px;
+  }
+}
+
+.hero-line {
+  pointer-events: none;
+}
+
+.hero-line:not(.hero-line-left):not(.hero-line-right) {
+  display: none; /* отключаем лишнюю полосу */
+}
+@media (max-width: 768px) {
+  .hero-line {
+    display: none;
+  }
+}
+/* ===== ЛИНИИ HERO — ИСПРАВЛЕННАЯ ВЕРСИЯ ===== */
+
+/* Базовый стиль линии */
+.hero-line {
+  position: absolute;
+  top: 0;
+  width: 6px;
+  height: 100%;
+  background: linear-gradient(180deg, transparent, #00e5ff, transparent);
+  opacity: 0.6;
+  filter: blur(1px);
+  animation: verticalGlow 6s ease-in-out infinite;
+  pointer-events: none;
+}
+
+/* Левая линия */
+.hero-line-left {
+  left: 50px;
+}
+
+/* Правая линия */
+.hero-line-right {
+  right: 50px;
+}
+
+/* Удаляем любые “лишние” полосы */
+.hero-line:not(.hero-line-left):not(.hero-line-right) {
+  display: none;
+}
+
+/* Адаптив — на телефонах выключаем полосы */
+@media (max-width: 768px) {
+  .hero-line {
+    display: none !important;
   }
 }
